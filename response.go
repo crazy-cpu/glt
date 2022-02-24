@@ -1,7 +1,7 @@
 package glt
 
 import (
-	datamarket "GLT/datamarker"
+	datamarket "github.com/programmer-liu/GLT/datamarker"
 	"encoding/hex"
 	"fmt"
 	"strconv"

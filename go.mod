@@ -1,4 +1,4 @@
-module GLT
+module github.com/programmer-liu/GLT
 
 go 1.17
 

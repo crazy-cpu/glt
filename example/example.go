@@ -1,7 +1,7 @@
 package main
 
 import (
-	glt "GLT"
+	glt "github.com/programmer-liu/GLT"
 	"fmt"
 )
 
