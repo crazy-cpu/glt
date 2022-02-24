@@ -1,51 +1,41 @@
 package glt
 
-import "github.com/goburrow/serial"
-
 var DLT645Master *Master
 
 type Master struct {
-	// MasterRequestFrame chan []RequestFrame2007
+	MasterRequestFrame []byte
 
 	SlaveResponseFrame chan []byte
 
-	Serial
+	SerialPort
 }
 
-func NewMaster(serial *Serial) {
+func init() {
 	if DLT645Master == nil {
-		serial.Open()
 		DLT645Master = &Master{
-			// MasterRequestFrame: make(chan []RequestFrame2007, 50),
-			SlaveResponseFrame: make(chan []byte, 50),
-			Serial:             *serial,
+			MasterRequestFrame: make([]byte, 0),
+			SlaveResponseFrame: make(chan []byte, 1),
 		}
 	}
 }
 
-type Serial struct {
-	address  string
-	Port     serial.Port
-	BaudRate int
-	DataBit  int
-	StopBits int
-	Parity   string
-}
-
-func (s *Serial) Open() (serial.Port, error) {
-	port, err := serial.Open(&serial.Config{
-		Address:  s.address,
-		BaudRate: s.BaudRate,
-		DataBits: s.DataBit,
-		StopBits: s.StopBits,
-		Parity:   s.Parity,
-	})
-
-	s.Port = port
-
+func NewSerial(serial *SerialPort) error {
+	_, err := serial.Open()
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	return port, nil
+	DLT645Master.SerialPort = *serial
+	return nil
 }
+
+// func MasterHub() {
+// 	for {
+// 		select {
+// 		case request := <-DLT645Master.MasterRequestFrame:
+// 			DLT645Master.Port.Write(request)
+// 		case response := <-DLT645Master.SlaveResponseFrame:
+// 			fmt.Println("response:", response)
+// 		}
+// 	}
+
+// }

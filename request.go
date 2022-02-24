@@ -3,7 +3,30 @@ package glt
 import (
 	"encoding/hex"
 	"fmt"
+	"sync"
 )
+
+func (s *SerialPort) Request(address string, dataMarker string) (no string, vlaue float64) {
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+
+	go func() {
+		DLT645Master.SlaveResponseFrame <- s.Read()
+		wg.Done()
+	}()
+
+	body := DLT2007(address, dataMarker)
+	s.Port.Write(body)
+	wg.Wait()
+
+	// DLT645Master.MasterRequestFrame <- data
+	res := <-DLT645Master.SlaveResponseFrame
+	fmt.Println("res:", res)
+	return ResponseParse(res, dataMarker)
+}
 
 func DLT2007(address string, dataMarker string) []byte {
 	var frame = make([]byte, 0)
