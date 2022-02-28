@@ -1,4 +1,4 @@
-// package datamarker
+package datamarker
 
 // var DataMarker1997 = map[string]float64{
 // 	"9010": 100,   //(当前)正向有功总电能
