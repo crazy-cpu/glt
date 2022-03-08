@@ -1,8 +1,8 @@
 package glt
 
 import (
-	"fmt"
 	"sync"
+	"time"
 
 	"github.com/goburrow/serial"
 )
@@ -24,6 +24,7 @@ func (s *SerialPort) Open() (serial.Port, error) {
 		DataBits: s.DataBit,
 		StopBits: s.StopBits,
 		Parity:   s.Parity,
+		Timeout:  500 * time.Millisecond,
 	})
 
 	s.Port = port
@@ -37,19 +38,17 @@ func (s *SerialPort) Open() (serial.Port, error) {
 
 func (s *SerialPort) Read() []byte {
 	res := make([]byte, 0)
-	// var Bytes = 0
+
 	for {
 
 		b := make([]byte, 22)
 		n, _ := DLT645Master.Port.Read(b)
-		// Bytes = Bytes + n
+
 		res = append(res, b[0:n]...)
-		fmt.Println("Res:", res, " finishFlag:", b[n-1])
 		if b[n-1] == byte(22) { //0x16为结束符
 			break
 		}
 	}
 
-	// DLT645Master.SlaveResponseFrame <- b
 	return res
 }
