@@ -1,6 +1,6 @@
-package datamarket
+package datamarker
 
-var DataMarker = map[string]float64{
+var DataMarker2007 = map[string]float64{
 	//***********电能量数据精度***********
 	"00000000": 100, //组合有功总电能
 	"00010000": 100, //正向有功总电能

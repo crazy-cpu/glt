@@ -1,8 +1,9 @@
 package main
 
 import (
-	glt "github.com/programmer-liu/GLT"
 	"fmt"
+
+	glt "github.com/programmer-liu/GLT"
 )
 
 func main() {
@@ -11,12 +12,12 @@ func main() {
 		Address:  "/dev/ttyS2",
 		BaudRate: 2400,
 		DataBit:  8,
-		StopBits: 2,
-		Parity:   "N",
+		StopBits: 1,
+		Parity:   "E",
 	})
 
 	//读取A相电流
-	no, value := glt.DLT645Master.Request("210312036423", "02020100")
+	no, value := glt.DLT645Master.Request(glt.Protocol2007, "210312036423", "02020100")
 	fmt.Println("no:", no, " value:", value)
 
 }
