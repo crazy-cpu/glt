@@ -11,7 +11,7 @@ const (
 	Protocol1997 = "DL/T-1997"
 )
 
-func (s *SerialPort) Request(protocol string, address string, dataMarker string) (no string, vlaue float64) {
+func (s *SerialPort) Request(protocol string, address string, dataMarker string) (no string, vlaue float64,err error) {
 	s.Locker.Lock()
 	defer s.Locker.Unlock()
 
