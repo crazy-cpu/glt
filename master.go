@@ -24,18 +24,7 @@ func NewSerial(serial *SerialPort) error {
 	if err != nil {
 		return err
 	}
+	
 	DLT645Master.SerialPort = *serial
 	return nil
 }
-
-// func MasterHub() {
-// 	for {
-// 		select {
-// 		case request := <-DLT645Master.MasterRequestFrame:
-// 			DLT645Master.Port.Write(request)
-// 		case response := <-DLT645Master.SlaveResponseFrame:
-// 			fmt.Println("response:", response)
-// 		}
-// 	}
-
-// }

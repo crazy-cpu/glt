@@ -6,7 +6,12 @@ import (
 	"sync"
 )
 
-func (s *SerialPort) Request(address string, dataMarker string) (no string, vlaue float64) {
+const (
+	Protocol2007 = "DL/T-2007"
+	Protocol1997 = "DL/T-1997"
+)
+
+func (s *SerialPort) Request(protocol string, address string, dataMarker string) (no string, vlaue float64) {
 	s.Locker.Lock()
 	defer s.Locker.Unlock()
 
@@ -18,14 +23,24 @@ func (s *SerialPort) Request(address string, dataMarker string) (no string, vlau
 		wg.Done()
 	}()
 
-	body := DLT2007(address, dataMarker)
+	var body = make([]byte, 0)
+	switch protocol {
+	case Protocol2007:
+		body = DLT2007(address, dataMarker)
+	case Protocol1997:
+		body = DLT1997(address, dataMarker)
+	default:
+		panic(fmt.Sprintf("invalid protocol:'%s'", protocol))
+	}
+	// body := DLT2007(address, dataMarker)
+	// body = []byte{0xfe,0xfe,0xfe,0xfe,0x68,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0x68,0x01,0x02,0x33,0x33,0x35,0x16}
+	fmt.Println("frame:", hex.EncodeToString(body))
+
 	s.Port.Write(body)
 	wg.Wait()
 
-	// DLT645Master.MasterRequestFrame <- data
 	res := <-DLT645Master.SlaveResponseFrame
-	fmt.Println("res:", res)
-	return ResponseParse(res, dataMarker)
+	return Response(protocol, res, dataMarker)
 }
 
 func DLT2007(address string, dataMarker string) []byte {
@@ -41,9 +56,26 @@ func DLT2007(address string, dataMarker string) []byte {
 	frame = append(frame, Add33H(marker)...)                 //数据域
 
 	sum := CheckSum(frame[4:18])
-
 	frame = append(frame, sum)  //校验码
 	frame = append(frame, 0x16) //结束符
+	return frame
+}
+
+func DLT1997(address string, dataMarker string) []byte {
+	var frame = make([]byte, 0)
+	addr, _ := BytesReverse(address)
+	marker, _ := BytesReverse(dataMarker)
+
+	frame = append(frame, []byte{0xFE, 0xFE, 0xFE, 0xFE}...)
+	frame = append(frame, 0x68)
+	frame = append(frame, addr...)
+	frame = append(frame, 0x68)
+	frame = append(frame, 0x01)
+	frame = append(frame, 0x02)
+	frame = append(frame, Add33H(marker)...)
+	sum := CheckSum(frame[4:16])
+	frame = append(frame, sum)
+	frame = append(frame, 0x16)
 	return frame
 }
 
