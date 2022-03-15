@@ -33,6 +33,9 @@ func (s *SerialPort) Request(protocol string, address string, dataMarker string)
 		panic(fmt.Sprintf("invalid protocol:'%s'", protocol))
 	}
 	// body := DLT2007(address, dataMarker)
+	// body = []byte{0xfe,0xfe,0xfe,0xfe,0x68,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0x68,0x01,0x02,0x33,0x33,0x35,0x16}
+	fmt.Println("frame:", hex.EncodeToString(body))
+
 	s.Port.Write(body)
 	wg.Wait()
 
@@ -68,8 +71,9 @@ func DLT1997(address string, dataMarker string) []byte {
 	frame = append(frame, addr...)
 	frame = append(frame, 0x68)
 	frame = append(frame, 0x01)
+	frame = append(frame, 0x02)
 	frame = append(frame, Add33H(marker)...)
-	sum := CheckSum(frame[4:13])
+	sum := CheckSum(frame[4:16])
 	frame = append(frame, sum)
 	frame = append(frame, 0x16)
 	return frame

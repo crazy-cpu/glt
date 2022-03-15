@@ -15,16 +15,17 @@ func Response(protocol string, response []byte, register string) (no string, val
 	// 	return
 	// }需要验证数据完整性，后期加
 
-	No, _ := BytesReverse(hex.EncodeToString(response[5:11]))
 	var Data []byte
 
 	if protocol == Protocol2007 {
+		No, _ := BytesReverse(hex.EncodeToString(response[5:11]))
 		Data, _ = BytesReverse(hex.EncodeToString(Sub33H(response[18:20])))
 		noHex := hex.EncodeToString(No)
 		v, _ := strconv.ParseFloat(hex.EncodeToString(Data), 32)
 		return noHex, v / datamarket.DataMarker2007[register]
 	} else if protocol == Protocol1997 {
-		Data, _ = BytesReverse(hex.EncodeToString(Sub33H(response[16:18])))
+		No, _ := BytesReverse(hex.EncodeToString(response[1:7]))
+		Data, _ = BytesReverse(hex.EncodeToString(Sub33H(response[12:14])))
 		noHex := hex.EncodeToString(No)
 		v, _ := strconv.ParseFloat(hex.EncodeToString(Data), 32)
 		return noHex, v / datamarket.DataMarker1997[register]
