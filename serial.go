@@ -25,7 +25,7 @@ func (s *SerialPort) Open() (serial.Port, error) {
 		DataBits: s.DataBit,
 		StopBits: s.StopBits,
 		Parity:   s.Parity,
-		Timeout:  500 * time.Millisecond,
+		Timeout:  2 * time.Second,
 	})
 
 	s.Port = port
