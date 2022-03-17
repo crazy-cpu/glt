@@ -11,7 +11,7 @@ const (
 	Protocol1997 = "DL/T-1997"
 )
 
-func (s *SerialPort) Request(protocol string, address string, dataMarker string) (no string, vlaue float64,err error) {
+func (s *SerialPort) Request(protocol string, address string, dataMarker string) (no string, vlaue float64, err error) {
 	s.Locker.Lock()
 	defer s.Locker.Unlock()
 
@@ -79,6 +79,11 @@ func DLT1997(address string, dataMarker string) []byte {
 func BytesReverse(str string) ([]byte, error) {
 	if len(str)%2 != 0 {
 		return nil, fmt.Errorf("invalid hex str")
+	}
+
+	if len(str) == 2 {
+		r, _ := hex.DecodeString(str)
+		return r, nil
 	}
 	raw, _ := hex.DecodeString(str)
 	for i, j := 0, len(raw)-1; i <= j; i, j = i+1, j-1 {

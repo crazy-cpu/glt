@@ -24,6 +24,7 @@ func Response(protocol string, response []byte, register string) (no string, val
 	v, _ := strconv.ParseFloat(hex.EncodeToString(data), 32)
 
 	decimal, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", v), 32)
+	fmt.Println("actualValue:", actualValue, " data:", data, " decimal:", decimal)
 
 	if protocol == Protocol1997 {
 		return hex.EncodeToString(number), decimal / datamarker.DataMarker1997[register], nil
@@ -43,6 +44,9 @@ func GetValue(protocol string, b []byte) []byte {
 	if protocol == Protocol1997 {
 		return Sub33H(b[9+2+1 : 9+l+1])
 	} else if protocol == Protocol2007 {
+		if l < 4 {
+			return Sub33H(b[9+1 : 9+l+1])
+		}
 		return Sub33H(b[9+4+1 : 9+l+1])
 	} else {
 		panic(fmt.Sprintf("invalid protocol type:%s", protocol))
