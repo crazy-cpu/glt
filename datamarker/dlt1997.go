@@ -2,6 +2,7 @@ package datamarker
 
 var DataMarker1997 = map[string]float64{
 	"9010": 100,   //(当前)正向有功总电能
+	"9020": 100,   //(当前)反向有功总电能
 	"B611": 1,     //A相电压
 	"B612": 1,     //B相电压
 	"B613": 1,     //C相电压
