@@ -1,6 +1,8 @@
 package glt
 
 import (
+	"encoding/hex"
+	"fmt"
 	"sync"
 	"time"
 
@@ -51,6 +53,6 @@ func (s *SerialPort) Read() []byte {
 			break
 		}
 	}
-
+	fmt.Println("res:", hex.EncodeToString(res))
 	return res
 }
