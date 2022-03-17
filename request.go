@@ -32,9 +32,6 @@ func (s *SerialPort) Request(protocol string, address string, dataMarker string)
 	default:
 		panic(fmt.Sprintf("invalid protocol:'%s'", protocol))
 	}
-	// body := DLT2007(address, dataMarker)
-	// body = []byte{0xfe,0xfe,0xfe,0xfe,0x68,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0x68,0x01,0x02,0x33,0x33,0x35,0x16}
-	fmt.Println("frame:", hex.EncodeToString(body))
 
 	s.Port.Write(body)
 	wg.Wait()
