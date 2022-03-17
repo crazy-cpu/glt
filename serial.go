@@ -1,7 +1,6 @@
 package glt
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
@@ -41,19 +40,13 @@ func (s *SerialPort) Read() []byte {
 	res := make([]byte, 0)
 
 	for {
-
 		b := make([]byte, 22)
 		n, err := DLT645Master.Port.Read(b)
 		if err != nil {
-			fmt.Println("err:", err)
 			return nil
 		}
 		res = append(res, b[0:n]...)
-		fmt.Println("res:", res, "n :", n)
 
-		// if len(res)==16{
-		// 	break
-		// }
 		if b[n-1] == byte(22) { //0x16为结束符
 			break
 		}
