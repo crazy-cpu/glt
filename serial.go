@@ -38,21 +38,21 @@ func (s *SerialPort) Open() (serial.Port, error) {
 	return port, nil
 }
 
-func (s *SerialPort) Read() []byte {
+func (s *SerialPort) Read() ([]byte, error) {
 	res := make([]byte, 0)
 
 	for {
 		b := make([]byte, 22)
 		n, err := DLT645Master.Port.Read(b)
 		if err != nil {
-			return nil
+			return nil, err
 		}
 		res = append(res, b[0:n]...)
 
-		if b[n-1] == byte(22) { //0x16为结束符
+		if n >= 1 && b[n-1] == byte(22) { //0x16为结束符
 			break
 		}
 	}
 	fmt.Println("res:", hex.EncodeToString(res))
-	return res
+	return res, nil
 }

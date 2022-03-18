@@ -17,7 +17,6 @@ func Response(protocol string, response []byte, register string) (no string, val
 	}
 
 	res := IgnoreFrontGuide(response)
-
 	number, _ := BytesReverse(hex.EncodeToString(res[1:7]))
 	actualValue := GetValue(protocol, res)
 	data, _ := BytesReverse(hex.EncodeToString(actualValue))
@@ -76,7 +75,7 @@ func VerifyResponse(b []byte) bool {
 		return false
 	}
 	res := IgnoreFrontGuide(b)
-	if CheckSum(res[:len(res)-2]) != res[len(res)-2] || res[len(res)-1] != 0x16 {
+	if res[0] != 0x68 || res[len(res)-1] != 0x16 || CheckSum(res[:len(res)-2]) != res[len(res)-2] {
 		return false
 	}
 	return true
