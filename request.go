@@ -19,7 +19,13 @@ func (s *SerialPort) Request(protocol string, address string, dataMarker string)
 	wg.Add(1)
 
 	go func() {
-		DLT645Master.SlaveResponseFrame <- s.Read()
+		data, err := s.Read()
+		
+		if err != nil {
+			return
+		}
+
+		DLT645Master.SlaveResponseFrame <- data
 		wg.Done()
 	}()
 
