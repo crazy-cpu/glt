@@ -1,5 +1,6 @@
 # GLT
-DLT/2007 or DLT/1997 protocol support using golang
+DLT/2007 or DLT/1997 protocol support using golang  
+
 DL/T-1997和DL/T-2007数据标识尚未补全，但基础参数已可以使用，包含如下：
 
 |可获取参数|
