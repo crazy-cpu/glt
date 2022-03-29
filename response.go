@@ -23,7 +23,6 @@ func Response(protocol string, response []byte, register string) (no string, val
 	v, _ := strconv.ParseFloat(hex.EncodeToString(data), 32)
 
 	decimal, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", v), 32)
-	fmt.Println("actualValue:", actualValue, " data:", data, " decimal:", decimal)
 
 	if protocol == Protocol1997 {
 		return hex.EncodeToString(number), decimal / datamarker.DataMarker1997[register], nil

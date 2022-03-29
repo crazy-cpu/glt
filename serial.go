@@ -53,6 +53,5 @@ func (s *SerialPort) Read() ([]byte, error) {
 			break
 		}
 	}
-	fmt.Println("res:", hex.EncodeToString(res))
 	return res, nil
 }
